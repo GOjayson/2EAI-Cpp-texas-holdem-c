@@ -52,11 +52,12 @@ int willYouRaise( struct Game * game, struct Player * player, unsigned int total
 	}
 	case 2:
 	{
-		static unsigned int previousRound = 0;
+		static unsigned int previousPlays = 0;
 		static unsigned int previousBet = 0;
-		if( previousRound != game->round )
-		{ //When the previous game round is different from the current game round, we are in a new game and we take the big blind
+		if( previousPlays != game->plays )
+		{ //When the previous game plays is different from the current game plays, we are in a new game and we take the big blind
 			previousBet = game->blind * 2;
+			previousPlays = game->plays;
 		}
 		if( totalBet > previousBet * 2 )
 		{ //When the total bet is more than double the previous known bet, we fold

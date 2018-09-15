@@ -81,7 +81,7 @@ struct Player
 
 struct Game
 {
-	unsigned int round = 0;
+	unsigned int plays = 0;
 	byte dealer = 0;
 	unsigned int blind = 1;
 	unsigned int highestBet = 0;
@@ -1284,12 +1284,12 @@ void playGame( struct Game * game, byte winnerAmount )
 	}
 	while( game->playersSize > winnerAmount )
 	{
-		game->round++;
-		if( game->round % 32 == 0 ) //4 rounds with 8 players
+		game->plays++;
+		if( game->plays % 32 == 0 ) //4 rounds with 8 players
 		{
 			game->blind *= 2; //double the blind
 		}
-		printf( "Round %d (%d)\n--------\n\n", game->round, game->blind );
+		printf( "Play %d (%d)\n--------\n\n", game->plays, game->blind );
 		shuffleDeckInGame( game );
 		dealPocketInGame( game );
 #ifdef DEBUG_PRINT
