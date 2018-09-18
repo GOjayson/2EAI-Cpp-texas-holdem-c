@@ -110,6 +110,7 @@ int willYouRaise( struct Game * game, struct Player * player, unsigned int total
 		{ //Else I fold
 			return( -1 );
 		}
+		break;
 	case 6:
 		return( meineFunktion( game, player, totalBet ) );
 		break;
@@ -144,7 +145,7 @@ int main( void )
 	strcpy( p6.name, "Fuhrer" );
 	p6.ID = 6;
 	Player helloThisIsMe;
-	strcpy( helloThisIsMe.name, "!!! THIS IS ME !!!" );
+	strcpy( helloThisIsMe.name, "!!! ---> THIS IS ME <--- !!!" );
 	helloThisIsMe.ID = 0;
 
 	addPlayerToGame( &game, &p1 );

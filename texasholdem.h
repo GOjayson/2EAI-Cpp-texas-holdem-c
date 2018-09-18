@@ -976,33 +976,14 @@ void makeNewDeck( struct Game * game )
 
 void shuffleDeckInGame( struct Game * game )
 {
-/*	for( short i = 0 ; i < 1024 ; i++ )
+	for( short i = 0 ; i < 1024 ; i++ )
 	{
 		byte a = rand() % 52;
 		byte b = rand() % 52;
 		struct Card * temp = game->deck[a];
 		game->deck[a] = game->deck[b];
 		game->deck[b] = temp;
-	}*/
-
-	game->deck[8]->rank =   game->deck[15]->rank ;
-	game->deck[8]->suit =   game->deck[15]->suit ;
-	game->deck[21]->rank =  game->deck[16]->rank ;
-	game->deck[21]->suit =  game->deck[16]->suit ;
-	game->deck[34]->rank =  game->deck[17]->rank ;
-	game->deck[34]->suit =  game->deck[17]->suit ;
-	game->deck[47]->rank =  game->deck[19]->rank ;
-	game->deck[47]->suit =  game->deck[19]->suit ;
-
-	game->deck[15]->rank = 9;
-	game->deck[16]->rank = 9;
-	game->deck[17]->rank = 9;
-	game->deck[19]->rank = 9;
-	game->deck[15]->suit = SPADES;
-	game->deck[16]->suit = DIAMONDS;
-	game->deck[17]->suit = CLUBS;
-	game->deck[19]->suit = HEARTS;
-
+	}
 	game->deckIndex = 0;
 }
 
