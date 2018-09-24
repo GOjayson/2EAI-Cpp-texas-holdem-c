@@ -86,6 +86,7 @@ int willYouRaise( struct Game * game, struct Player * player, unsigned int total
 		{ //Else I will fold
 			return( -1 );
 		}
+		break;
 	case 5:
 		if( player->hand->cards[0]->suit == player->hand->cards[1]->suit )
 		{ //When the two cards in my hand have the same suit
