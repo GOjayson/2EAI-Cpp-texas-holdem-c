@@ -10,27 +10,27 @@ int meineFunktion( struct Game * game, struct Player * player, unsigned int tota
 	PokerRank myCombo = getMyHandRank( player->hand );
 	printf( "My rank : " );
 	printPokerRank( myCombo );
-//	for( int i = 0 ; i < game->playersSize ; i++ )
-//	{
-//		if( game->players[i]->ID != player->ID && isHandFilled( game->players[i]->hand ) )
-//		{
-//			PokerRank otherCombo = getMyHandRank( game->players[i]->hand );
-//			printf( "His/Her rank : " );
-//			printPokerRank( otherCombo );
-//			if( comparePokerRanks( myCombo, otherCombo ) == LOWER )
-//			{
-//				printf( "Fuck it !\n" );
-//				return( -1 );
-//			}
-//		}
-//	}
+        //	for( int i = 0 ; i < game->playersSize ; i++ )
+        //	{
+        //		if( game->players[i]->ID != player->ID && isHandFilled( game->players[i]->hand ) )
+        //		{
+        //			PokerRank otherCombo = getMyHandRank( game->players[i]->hand );
+        //			printf( "His/Her rank : " );
+        //			printPokerRank( otherCombo );
+        //			if( comparePokerRanks( myCombo, otherCombo ) == LOWER )
+        //			{
+        //				printf( "Fuck it !\n" );
+        //				return( -1 );
+        //			}
+        //		}
+        //	}
 	if( myCombo.category >= FLUSH )
 	{
 		return( player->chips );
 	}
 	if( table[0] == nullptr ) //nog geen kaarten op tafel
 	{
-		if( totalBet > ( player->bet * 2 ) || ( totalBet > ( game->blind * 5 ) && totalBet > ( player->chips / 2 ) ) )
+                if( totalBet > ( player->bet * 2.5 ) || ( totalBet > ( game->blind * 5.5 ) && totalBet > ( player->chips / 2.5 ) ) )
 		{
 			return( -1 );
 		}
@@ -74,53 +74,217 @@ int willYouRaise( struct Game * game, struct Player * player, unsigned int total
 	printf( "%s what do you do ?\n", player->name );
 	switch( player->ID )
 	{
-	case 0: //THIS IS ME !!!!!!!!!!!!
+        case 0: //Jayson
 	{
-		//Magic Happens Here !!!
-	}
-	case 1: //Alice
-	{
-		if( player->hand->cards[0]->rank >= 10 || player->hand->cards[1]->rank >= 10 )
-		{
-			return( 10 );
-		}
-		return( -1 );
-	}
-	case 2: //Bob
-	{
-		PokerRank myCombo = getMyHandRank( player->hand );
-		if( myCombo.category >= ONE_PAIR )
-		{
-			return( player->chips );
-		}
-		return( -1 );
-	}
-	case 3: //Carla
-	{
-		for( int i = 0 ; i < game->playersSize ; i++ )
-		{ //search Alice
-			if( game->players[i]->ID == 1 )
-			{
-				if( game->players[i]->bet > ( game->blind * 2 ) )
-				{
-					return( -1 );
-				}
-				else
-				{
-					return( 1 );
-				}
-			}
-		}
-		return( player->chips );
-	}
-	case 4: //Danny
-	{
-		int maxInzet = game->players[game->dealer]->chips / 2;
-		if( maxInzet > totalBet )
-		{
-			return( maxInzet - totalBet );
-		}
-		return( 0 );
+            if(table[0] == nullptr)
+            {
+
+                int VerschilMax = player->hand->cards[1]->rank - player->hand->cards[0]->rank;
+                int VerschilMin = player->hand->cards[0]->rank - player->hand->cards[1]->rank;
+
+
+                PokerRank myCombo = getMyHandRank( player->hand );
+                if( (myCombo.category == ONE_PAIR) && (player->hand->cards[0]->rank >= 7) )
+                {
+                        return( 5 );
+                }
+                else if( totalBet > ( player->bet * 2.5 ) || ( totalBet > ( game->blind * 5.5 ) && totalBet > ( player->chips / 2.5 ) ) )
+                {
+                        return( -1 );
+                }
+                else if( myCombo.category == ONE_PAIR && (player->hand->cards[0]->rank < 7) )
+                {
+                        return( 3 );
+                }
+                else if( (player->hand->cards[0]->rank >= 7 && player->hand->cards[1]->rank >= 7) && ((VerschilMax <= 5 && VerschilMax <= -5) || (VerschilMin <= 5 && VerschilMin <= -5)))
+                {
+                        return( 1 );
+                }
+                else if( (player->hand->cards[0]->rank < 4 && player->hand->cards[1]->rank < 4 ))
+                {
+                    return(-1);
+                }
+                else
+                {
+                    return(0);
+                }
+            }
+
+
+
+            else if(table[4] == nullptr)
+            {
+                printf("Ik check als er 3 kaarten liggen op tafel");
+
+                PokerRank myCombo = getMyHandRank( player->hand );
+
+
+                if( myCombo.category == TWO_PAIR)
+                {
+                    return( 2 );
+                }
+                else if( myCombo.category == THREE_OF_A_KIND)
+                {
+                    return( 5 );
+                }
+                else if( myCombo.category == STRAIGHT)
+                {
+                    return( 10 );
+                }
+                else if( myCombo.category == FLUSH)
+                {
+                    return( 15 );
+                }
+                else if( myCombo.category == FULL_HOUSE)
+                {
+                    return( 20 );
+                }
+                else if( myCombo.category == FOUR_OF_A_KIND)
+                {
+                    return( 25 );
+                }
+                else if( myCombo.category == STRAIGHT_FLUSH)
+                {
+                    return( 50 );
+                }
+                else if( myCombo.category == STRAIGHT_FLUSH)
+                {
+                    return( 100 );
+                }
+                else if((myCombo.category == HIGH_CARD) && (player->bet*5 < totalBet))
+                {
+                    return( -1 );
+                }
+                else
+                {
+                    return( 0 );
+                }
+              }
+
+            else if(table[5] == nullptr)
+            {
+                printf("Ik check als er 4 kaarten liggen op tafel");
+
+                PokerRank myCombo = getMyHandRank( player->hand );
+
+
+                if( myCombo.category == FULL_HOUSE)
+                {
+                    return( 20 );
+                }
+                else if( myCombo.category == FOUR_OF_A_KIND)
+                {
+                    return( 25 );
+                }
+                else if( myCombo.category == STRAIGHT_FLUSH)
+                {
+                    return( 50 );
+                }
+                else if( myCombo.category == STRAIGHT_FLUSH)
+                {
+                    return( 100 );
+                }
+                else if((myCombo.category <= TWO_PAIR) && (player->bet*5 < totalBet))
+                {
+                    return( -1 );
+                }
+                else
+                {
+                    return( 0 );
+                }
+              }
+
+            else if(table[6] == nullptr)
+            {
+                printf("Ik check als er 5 kaarten liggen op tafel");
+
+                PokerRank myCombo = getMyHandRank( player->hand );
+
+                if( myCombo.category == STRAIGHT_FLUSH)
+                {
+                    return( 50 );
+                }
+                else if( myCombo.category == STRAIGHT_FLUSH)
+                {
+                    return( 100 );
+                }
+                else if((myCombo.category <= FLUSH) && (player->bet*5 < totalBet))
+                {
+                    return( -1 );
+                }
+                else
+                {
+                    return( 0 );
+                }
+              }
+
+            else
+            {
+                return (0);
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        }
+        case 1: //Alice
+        {
+                if( player->hand->cards[0]->rank >= 10 || player->hand->cards[1]->rank >= 10 )
+                {
+                        return( 10 );
+                }
+                return( -1 );
+        }
+        case 2: //Bob
+        {
+                PokerRank myCombo = getMyHandRank( player->hand );
+                if( myCombo.category >= ONE_PAIR )
+                {
+                        return( player->chips );
+                }
+                return( -1 );
+        }
+        case 3: //Carla
+        {
+                for( int i = 0 ; i < game->playersSize ; i++ )
+                { //search Alice
+                        if( game->players[i]->ID == 1 )
+                        {
+                                if( game->players[i]->bet > ( game->blind * 2 ) )
+                                {
+                                        return( -1 );
+                                }
+                                else
+                                {
+                                        return( 1 );
+                                }
+                        }
+                }
+                return( player->chips );
+        }
+        case 4: //Danny
+        {
+                int maxInzet = game->players[game->dealer]->chips / 2;
+                if( maxInzet > totalBet )
+                {
+                        return( maxInzet - totalBet );
+                }
+                return( 0 );
 	}
 	case 5: //Eric
 	{
@@ -138,7 +302,7 @@ int willYouRaise( struct Game * game, struct Player * player, unsigned int total
 		}
 	}
 	case 6 :
-		return meineFunktion( game, player, totalBet );
+                return (-1);
 	default:
 		return( 0 ); //Call all the time
 		break;
@@ -176,7 +340,7 @@ int main( void )
 	p6.ID = 6;
 
 	Player mijnSpeler;
-	strcpy( mijnSpeler.name, "THIS IS ME <-----------------" );
+        strcpy( mijnSpeler.name, "Jayson" );
 	mijnSpeler.ID = 0;
 
 	addPlayerToGame( &game, &p1 );
